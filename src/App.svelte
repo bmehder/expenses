@@ -92,12 +92,14 @@
   const setLocalStorage = () =>
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
-  onMount(() => {
-    expenses = isLocalStorageHasExpenses
-      ? JSON.parse(localStorage.getItem("expenses"))
-      : [];
-  });
+  const getExpensesFromLocalStorage = () =>
+    JSON.parse(localStorage.getItem("expenses"));
 
+  const getLocalStorage = () => {
+    expenses = isLocalStorageHasExpenses ? getExpensesFromLocalStorage() : [];
+  };
+
+  onMount(() => getLocalStorage());
   afterUpdate(() => setLocalStorage());
 
   /**
@@ -109,6 +111,7 @@
 </script>
 
 <Navbar {showForm} />
+
 <main class="content">
   {#if isFormOpen}
     <Modal>
@@ -122,8 +125,11 @@
       />
     </Modal>
   {/if}
+
   <Totals title="total expenses" {total} />
+
   <ExpensesList {expenses} />
+
   {#if expenses.length > 0}
     <button
       type="button"
