@@ -4,5 +4,5 @@
 </script>
 
 <section class="main-title">
-  <h2>{title} : ${total}</h2>
+  <h2>{title} : ${total.toFixed(2)}</h2>
 </section>
