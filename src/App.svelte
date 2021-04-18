@@ -63,7 +63,8 @@
   }
 
   function clearExpenses() {
-    expenses = [];
+    const isConfirmed = confirm("Are you sure you want to delete everything?");
+    isConfirmed && (expenses = []);
   }
 
   function setLocalStorage() {
