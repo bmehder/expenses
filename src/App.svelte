@@ -30,12 +30,8 @@
    */
 
   const addExpense = ({ name, amount }) => {
-    let expense = {
-      id: Math.random() * Date.now(),
-      name,
-      amount,
-    };
-    expenses = [expense, ...expenses];
+    const id = Math.random() * Date.now();
+    expenses = [{ id, name, amount }, ...expenses];
   };
 
   const removeExpense = (id) => {
