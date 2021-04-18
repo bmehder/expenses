@@ -1,11 +1,9 @@
 <script>
   import { setContext, onMount, afterUpdate } from "svelte";
-  // import expensesData from "./expenses";
   import Navbar from "./Navbar.svelte";
   import ExpensesList from "./ExpensesList.svelte";
   import Totals from "./Totals.svelte";
   import ExpenseForm from "./ExpenseForm.svelte";
-  import Modal from "./Modal.svelte";
 
   /**
    * Local vars
@@ -65,7 +63,7 @@
 
   $: total = expenses.reduce((acc, curr) => {
     return (acc += curr.amount);
-  }, 0);
+  }, 0); // reactively calculate total expense
 
   const showForm = () => (isFormOpen = true);
 
@@ -104,6 +102,8 @@
 
   /**
    * Global State
+   *
+   * used to export functions directly to deeply nested components
    */
 
   setContext("remove", removeExpense);
@@ -114,16 +114,14 @@
 
 <main class="content">
   {#if isFormOpen}
-    <Modal>
-      <ExpenseForm
-        {addExpense}
-        name={setName}
-        amount={setAmount}
-        {isEditing}
-        {updateExpense}
-        {hideForm}
-      />
-    </Modal>
+    <ExpenseForm
+      {addExpense}
+      name={setName}
+      amount={setAmount}
+      {isEditing}
+      {updateExpense}
+      {hideForm}
+    />
   {/if}
 
   <Totals title="total expenses" {total} />
