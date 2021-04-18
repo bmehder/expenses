@@ -19,6 +19,8 @@
     return (acc += curr.amount);
   }, 0);
 
+  $: isLocalStorage = localStorage.getItem("expenses");
+
   const showForm = () => (isFormOpen = true);
 
   const hideForm = () => {
@@ -67,15 +69,14 @@
     isConfirmed && (expenses = []);
   }
 
-  function setLocalStorage() {
+  const setLocalStorage = () =>
     localStorage.setItem("expenses", JSON.stringify(expenses));
-  }
 
   setContext("remove", removeExpense);
   setContext("modify", setModifiedExpense);
 
   onMount(() => {
-    expenses = localStorage.getItem("expenses")
+    expenses = isLocalStorage
       ? JSON.parse(localStorage.getItem("expenses"))
       : [];
   });

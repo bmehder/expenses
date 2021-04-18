@@ -10,11 +10,14 @@
 
   $: isEmpty = !name || !amount;
 
+  const resetForm = () => {
+    name = "";
+    amount = "";
+  };
   function handleSubmit() {
     isEditing ? editExpense({ name, amount }) : addExpense({ name, amount });
 
-    name = "";
-    amount = "";
+    resetForm();
     hideForm();
   }
 </script>
