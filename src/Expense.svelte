@@ -23,7 +23,7 @@
     </h2>
     {#if isDisplayAmount}
       <h4 transition:slide>
-        amount : ${amount}
+        amount : ${amount.toFixed(2)}
       </h4>
     {/if}
   </div>
