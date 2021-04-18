@@ -19,12 +19,14 @@
     return (acc += curr.amount);
   }, 0);
 
-  function showForm() {
-    isFormOpen = true;
-  }
+  const showForm = () => (isFormOpen = true);
 
-  function hideForm() {
+  const hideForm = () => {
     isFormOpen = false;
+    resetForm();
+  };
+
+  function resetForm() {
     setName = "";
     setAmount = null;
     setId = null;
@@ -49,6 +51,7 @@
     setId = expense.id;
     setName = expense.name;
     setAmount = expense.amount;
+
     showForm();
   }
 
@@ -56,9 +59,7 @@
     expenses = expenses.map((item) => {
       return item.id === setId ? { ...item, name, amount } : { ...item };
     });
-    setId = null;
-    setName = "";
-    setAmount = null;
+    resetForm();
   }
 
   function clearExpenses() {

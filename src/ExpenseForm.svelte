@@ -30,7 +30,7 @@
 
     <div class="form-control">
       <label for="amount">amount</label>
-      <input type="number" id="amount" bind:value={amount} />
+      <input type="number" step="any" id="amount" bind:value={amount} />
     </div>
 
     {#if isEmpty}

@@ -19,9 +19,7 @@
         <Expense {...expense} />
       </div>
     {:else}
-      <h2 transition:fade={{ delay: 400, duration: 200 }}>
-        There are no expenses
-      </h2>
+      <h2 in:fade={{ delay: 1000, duration: 200 }}>There are no expenses</h2>
     {/each}
   </ul>
 </section>
