@@ -7,19 +7,65 @@
   import ExpenseForm from "./ExpenseForm.svelte";
   import Modal from "./Modal.svelte";
 
+  /**
+   * Local vars
+   */
+
   let expenses = [];
   let setId = null;
   let setName = "";
   let setAmount = null;
   let isFormOpen = false;
 
+  /**
+   * Predicates
+   */
+
   $: isEditing = setId ? true : false;
+
+  $: isLocalStorageHasExpenses = localStorage.getItem("expenses");
+
+  /**
+   * CRUD Functions
+   */
+
+  const addExpense = ({ name, amount }) => {
+    let expense = {
+      id: Math.random() * Date.now(),
+      name,
+      amount,
+    };
+    expenses = [expense, ...expenses];
+  };
+
+  const removeExpense = (id) => {
+    expenses = expenses.filter((item) => item.id !== id);
+  };
+
+  const selectExpense = (id) => {
+    let expense = expenses.find((item) => item.id === id);
+
+    setId = expense.id;
+    setName = expense.name;
+    setAmount = expense.amount;
+
+    showForm();
+  };
+
+  const updateExpense = ({ name, amount }) => {
+    expenses = expenses.map((item) => {
+      return item.id === setId ? { ...item, name, amount } : { ...item };
+    });
+    resetForm();
+  };
+
+  /**
+   * Helper Functions
+   */
 
   $: total = expenses.reduce((acc, curr) => {
     return (acc += curr.amount);
   }, 0);
-
-  $: isLocalStorage = localStorage.getItem("expenses");
 
   const showForm = () => (isFormOpen = true);
 
@@ -28,60 +74,38 @@
     resetForm();
   };
 
-  function resetForm() {
+  const resetForm = () => {
     setName = "";
     setAmount = null;
     setId = null;
-  }
+  };
 
-  function removeExpense(id) {
-    expenses = expenses.filter((item) => item.id !== id);
-  }
-
-  function addExpense({ name, amount }) {
-    let expense = {
-      id: Math.random() * Date.now(),
-      name,
-      amount,
-    };
-    expenses = [expense, ...expenses];
-  }
-
-  function setModifiedExpense(id) {
-    let expense = expenses.find((item) => item.id === id);
-
-    setId = expense.id;
-    setName = expense.name;
-    setAmount = expense.amount;
-
-    showForm();
-  }
-
-  function editExpense({ name, amount }) {
-    expenses = expenses.map((item) => {
-      return item.id === setId ? { ...item, name, amount } : { ...item };
-    });
-    resetForm();
-  }
-
-  function clearExpenses() {
+  const clearExpenses = () => {
     const isConfirmed = confirm("Are you sure you want to delete everything?");
     isConfirmed && (expenses = []);
-  }
+  };
+
+  /**
+   * Local Storage & Life-cycles
+   */
 
   const setLocalStorage = () =>
     localStorage.setItem("expenses", JSON.stringify(expenses));
 
-  setContext("remove", removeExpense);
-  setContext("modify", setModifiedExpense);
-
   onMount(() => {
-    expenses = isLocalStorage
+    expenses = isLocalStorageHasExpenses
       ? JSON.parse(localStorage.getItem("expenses"))
       : [];
   });
 
   afterUpdate(() => setLocalStorage());
+
+  /**
+   * Global State
+   */
+
+  setContext("remove", removeExpense);
+  setContext("modify", selectExpense);
 </script>
 
 <Navbar {showForm} />
@@ -93,7 +117,7 @@
         name={setName}
         amount={setAmount}
         {isEditing}
-        {editExpense}
+        {updateExpense}
         {hideForm}
       />
     </Modal>

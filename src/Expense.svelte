@@ -1,6 +1,7 @@
 <script>
   import { slide } from "svelte/transition";
   import { getContext } from "svelte";
+
   export let id;
   export let name = "";
   export let amount = 0;
@@ -10,7 +11,7 @@
   const toggleExpense = () => (isDisplayAmount = !isDisplayAmount);
 
   const removeExpense = getContext("remove");
-  const setModifiedExpense = getContext("modify");
+  const modifyExpense = getContext("modify");
 </script>
 
 <article class="single-expense">
@@ -28,10 +29,7 @@
     {/if}
   </div>
   <div class="expense-buttons">
-    <button
-      class="expense-btn edit-btn"
-      on:click={() => setModifiedExpense(id)}
-    >
+    <button class="expense-btn edit-btn" on:click={() => modifyExpense(id)}>
       <i class="fas fa-pen" />
     </button>
     <button class="expense-btn delete-btn" on:click={() => removeExpense(id)}>

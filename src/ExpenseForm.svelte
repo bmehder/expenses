@@ -5,7 +5,7 @@
   export let amount = null;
   export let isEditing;
   export let addExpense;
-  export let editExpense;
+  export let updateExpense;
   export let hideForm;
 
   $: isEmpty = !name || !amount;
@@ -15,7 +15,7 @@
     amount = "";
   };
   function handleSubmit() {
-    isEditing ? editExpense({ name, amount }) : addExpense({ name, amount });
+    isEditing ? updateExpense({ name, amount }) : addExpense({ name, amount });
 
     resetForm();
     hideForm();
