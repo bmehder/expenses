@@ -1,5 +1,5 @@
 <script>
-  export let title = " default title";
+  export let title = "default title";
   export let total = 0;
 </script>
 

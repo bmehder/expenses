@@ -28,6 +28,7 @@
       </h4>
     {/if}
   </div>
+
   <div class="expense-buttons">
     <button class="expense-btn edit-btn" on:click={() => modifyExpense(id)}>
       <i class="fas fa-pen" />

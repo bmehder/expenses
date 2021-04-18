@@ -1,5 +1,6 @@
 <script>
   import { setContext, onMount, afterUpdate } from "svelte";
+
   import Navbar from "./Navbar.svelte";
   import ExpensesList from "./ExpensesList.svelte";
   import Totals from "./Totals.svelte";
@@ -10,16 +11,17 @@
    */
 
   let expenses = [];
-  let setId = null;
-  let setName = "";
-  let setAmount = null;
   let isFormOpen = false;
+
+  let selectedId = null;
+  let selectedName = "";
+  let selectedAmount = null;
 
   /**
    * Predicates
    */
 
-  $: isEditing = setId ? true : false;
+  $: isEditing = selectedId ? true : false;
 
   $: isLocalStorageHasExpenses = localStorage.getItem("expenses");
 
@@ -43,17 +45,18 @@
   const selectExpense = (id) => {
     let expense = expenses.find((item) => item.id === id);
 
-    setId = expense.id;
-    setName = expense.name;
-    setAmount = expense.amount;
+    selectedId = expense.id;
+    selectedName = expense.name;
+    selectedAmount = expense.amount;
 
     showForm();
   };
 
   const updateExpense = ({ name, amount }) => {
     expenses = expenses.map((item) => {
-      return item.id === setId ? { ...item, name, amount } : { ...item };
+      return item.id === selectedId ? { ...item, name, amount } : { ...item };
     });
+
     resetForm();
   };
 
@@ -61,21 +64,21 @@
    * Helper Functions
    */
 
+  // reactively calculate total expense
   $: total = expenses.reduce((acc, curr) => {
     return (acc += curr.amount);
-  }, 0); // reactively calculate total expense
+  }, 0);
 
   const showForm = () => (isFormOpen = true);
 
-  const hideForm = () => {
-    isFormOpen = false;
-    resetForm();
-  };
+  const hideForm = () => resetForm() && (isFormOpen = false);
 
   const resetForm = () => {
-    setName = "";
-    setAmount = null;
-    setId = null;
+    selectedName = "";
+    selectedAmount = null;
+    selectedId = null;
+
+    return true;
   };
 
   const clearExpenses = () => {
@@ -84,7 +87,7 @@
   };
 
   /**
-   * Local Storage & Life-cycles
+   * Local Storage functions
    */
 
   const setLocalStorage = () =>
@@ -96,6 +99,10 @@
   const getLocalStorage = () => {
     expenses = isLocalStorageHasExpenses ? getExpensesFromLocalStorage() : [];
   };
+
+  /**
+   * Life Cycle functions
+   */
 
   onMount(() => getLocalStorage());
   afterUpdate(() => setLocalStorage());
@@ -116,8 +123,8 @@
   {#if isFormOpen}
     <ExpenseForm
       {addExpense}
-      name={setName}
-      amount={setAmount}
+      name={selectedName}
+      amount={selectedAmount}
       {isEditing}
       {updateExpense}
       {hideForm}

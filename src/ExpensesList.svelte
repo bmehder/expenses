@@ -1,6 +1,7 @@
 <script>
   import { fly, fade } from "svelte/transition";
   import { flip } from "svelte/animate";
+
   import SectionTitle from "./Title.svelte";
   import Expense from "./Expense.svelte";
 
@@ -9,6 +10,7 @@
 
 <section>
   <SectionTitle title="expense list" />
+
   <ul>
     {#each expenses as expense, index (expense.id)}
       <div
